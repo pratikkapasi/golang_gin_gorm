@@ -17,18 +17,29 @@ func main() {
  // instead of := which would assign it only in this function
  db, err = gorm.Open("sqlite3", "./gorm.db")
  if err != nil {
-   fmt.Println(err)
+    fmt.Println(err)
  }
  defer db.Close()
  db.AutoMigrate(&Person{})
  r := gin.Default()
- r.GET("/", GetProjects)
+ r.GET("/people/", GetPeople)
+ r.GET("/people/:id", GetPerson)
  r.Run(":8080")
 }
-func GetProjects(c *gin.Context) {
+func GetPerson(c *gin.Context) {
+ id := c.Params.ByName("id")
+ var person Person
+ if err := db.Where("id = ?", id).First(&person).Error; err != nil {
+    c.AbortWithStatus(404)
+    fmt.Println(err)
+ } else {
+    c.JSON(200, person)
+ }
+}
+func GetPeople(c *gin.Context) {
  var people []Person
  if err := db.Find(&people).Error; err != nil {
-    c.AbortWithStatus(404)
+ c.AbortWithStatus(404)
     fmt.Println(err)
  } else {
     c.JSON(200, people)
