@@ -3,7 +3,7 @@ import (
  "fmt"
  "github.com/gin-gonic/gin"
  "github.com/jinzhu/gorm"
- _ "github.com/jinzhu/gorm/dialects/sqlite"
+ _ "github.com/go-sql-driver/mysql"
 )
 var db *gorm.DB
 var err error
@@ -16,7 +16,8 @@ type Person struct {
 func main() {
  // NOTE: See we’re using = to assign the global var
  // instead of := which would assign it only in this function
- db, err = gorm.Open("sqlite3", "./gorm.db")
+ // root:password@tcp(hostname:port)/database
+ db, _ = gorm.Open("mysql", "root:@tcp(127.0.0.1:3306)/people_golang?charset=utf8&parseTime=True&loc=Local")
  if err != nil {
     fmt.Println(err)
  }
