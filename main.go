@@ -11,6 +11,7 @@ type Person struct {
  ID uint `json:"id"`
  FirstName string `json:"firstname"`
  LastName string `json:"lastname"`
+ City string `json:"city"`
 }
 func main() {
  // NOTE: See we’re using = to assign the global var
