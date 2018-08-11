@@ -24,6 +24,8 @@ func main() {
  r := gin.Default()
  r.GET("/people/", GetPeople)
  r.GET("/people/:id", GetPerson)
+ r.POST("/people", CreatePerson)
+
  r.Run(":8080")
 }
 func GetPerson(c *gin.Context) {
@@ -44,4 +46,10 @@ func GetPeople(c *gin.Context) {
  } else {
     c.JSON(200, people)
  }
+}
+func CreatePerson(c *gin.Context) {
+ var person Person
+ c.BindJSON(&person)
+ db.Create(&person)
+ c.JSON(200, person)
 }
